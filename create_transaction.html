@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>create_driver</title>
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Nunito"/>
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+
+<body> 
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <a class="navbar-brand" href="home.html">menged.com</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+        </button>
+    
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item ">
+                <a class="nav-link" href="home.html">Home</a>
+            </li>
+            <li class="nav-item ">
+                <a class="nav-link" href="drivers.html">Drivers</a>
+            </li>
+            <li class="nav-item ">
+                <a class="nav-link" href="customers.html">Customers</a>
+            </li>
+            <li class="nav-item active">
+                <a class="nav-link" href="transactions.html">Transactions</a>
+            </li>
+            <li class="nav-item ">
+                <a class="nav-link" href="notifications.html">Notifications</a>
+            </li>
+        </ul>
+        <form class="form-inline my-2 my-lg-0" id="logoutForm">
+            <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Logout</button>
+        </form>
+        </div>
+    </nav>
+
+    <div class="container-fluid ">
+       <div class="row justify-content-center ">
+           <div class="col-sm-7 col-xs-12 py-3 my-5">
+            <div class="display-4 text-center text-secondary">Transaction</div>
+               <div class="card mt-3">
+                   <div class="card-body">
+                    <form id="new_transaction">
+                        <div class="form-row">
+                            <div class="form-group col-6">
+                                <label for="driver_name">Driver Name</label>
+                                <input type="text" name="driver_name" class="form-control" id="driver_name" placeholder="John Doe">
+                            </div>
+                            <div class="form-group col-6">
+                                <label for="customer_name">Customer Name</label>
+                                <input type="text" name="customer_name" class="form-control" id="customer_name" placeholder="John Doe">
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group col-6">
+                                <label for="starting_point">Starting Location</label>
+                                <input type="text" class="form-control" id="starting_point" name="starting_point" placeholder="Bole">
+                            </div>
+                            <div class="form-group col-6">
+                                <label for="destination_point">Destination</label>
+                                <input type="text" class="form-control" id="destination_point" name="destination_point" placeholder="Legehar">
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group col-6">
+                                <label for="distance">Total Distance(Km)</label>
+                                <input type="text" class="form-control" id="distance" name="distance" placeholder="10">
+                            </div>
+                            <div class="form-group col-6">
+                                <label for="rate">Birr/Km</label>
+                                <input type="text" class="form-control" id="rate" name="rate" placeholder="30">
+                            </div>
+                        </div>
+                        
+                        <button type="submit" class="btn float-right btn-outline-info">Create Transaction</button>
+                    </form>
+                   </div>
+               </div>
+            
+           </div>
+       </div>
+    </div>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/7.7.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/7.7.0/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/7.7.0/firebase-analytics.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/7.7.0/firebase-database.js"></script>
+    <script src="js/scripts.js"></script>
+
+
+    <script>
+        
+        $('#new_transaction').submit(function(e){
+            e.preventDefault();
+            
+            var entry = {};
+            entry.driver_name = $(this).find('[name="driver_name"]').val();
+            entry.customer_name = $(this).find('[name="customer_name"]').val();
+            entry.distance = $(this).find('[name="distance"]').val();
+            entry.starting_point = $(this).find('[name="starting_point"]').val();
+            entry.destination_point = $(this).find('[name="destination_point"]').val();
+            entry.rate = $(this).find('[name="rate"]').val();
+            entry.createdAt = new Date().getTime();
+            
+            var Entry = firebase.database().ref('/transactions');
+            
+            Entry.push(entry).then(function(data){
+                window.location.href = 'transactions.html'
+            }).catch(function(error){
+                alert(error);
+                console.error(error);
+            })
+            
+            return false;
+        });
+
+    </script>
+
+
+</body>
+
+</html>

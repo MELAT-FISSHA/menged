@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>create_driver</title>
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Nunito"/>
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+
+<body> 
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <a class="navbar-brand" href="home.html">menged.com</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+        </button>
+    
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item ">
+                <a class="nav-link" href="home.html">Home</a>
+            </li>
+            <li class="nav-item ">
+                <a class="nav-link" href="drivers.html">Drivers</a>
+            </li>
+            <li class="nav-item active">
+                <a class="nav-link" href="customers.html">Customers</a>
+            </li>
+            <li class="nav-item ">
+                <a class="nav-link" href="transactions.html">Transactions</a>
+            </li>
+            <li class="nav-item ">
+                <a class="nav-link" href="notifications.html">Notifications</a>
+            </li>
+        </ul>
+        <form class="form-inline my-2 my-lg-0" id="logoutForm">
+            <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Logout</button>
+        </form>
+        </div>
+    </nav>
+
+    <div class="container-fluid">
+       <div class="row justify-content-center ">
+           <div class="col-sm-7 col-xs-12 py-3 my-5">
+            <div class="display-4 text-center text-secondary">Register</div>
+               <div class="card mt-3">
+                   <div class="card-body">
+                    <form id="new_driver">
+                        <div class="form-row">
+                        <div class="form-group col-12">
+                            <label for="fullName">Full Name</label>
+                            <input type="text" name="full_name" class="form-control" id="fullName" placeholder="John Doe">
+                        </div>
+                          <div class="form-group col-12">
+                            <label for="email">Email</label>
+                            <input type="email" class="form-control" id="email" name="email" placeholder="email@example.com">
+                          </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group col">
+                                <label for="phoneNumber">Phone Number</label>
+                                <input type="text" class="form-control" id="phoneNumber" name="phone_number" placeholder="+251978474106">
+                              </div>
+                        </div>
+                        
+                        <button type="submit" class="btn btn-primary btn-outline-primary float-right">Add Customer</button>
+                    </form>
+                   </div>
+               </div>
+            
+           </div>
+       </div>
+    </div>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/7.7.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/7.7.0/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/7.7.0/firebase-analytics.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/7.7.0/firebase-database.js"></script>
+    <script src="js/scripts.js"></script>
+
+
+    <script>
+
+        $('#new_driver').submit(function(e){
+            e.preventDefault();
+            
+            var entry = {};
+            entry.name = $(this).find('[name="full_name"]').val();
+            entry.email = $(this).find('[name="email"]').val();
+            entry.phone_number = $(this).find('[name="phone_number"]').val();
+            entry.driver_id = $(this).find('[name="full_name"]').val()+$(this).find('[name="plate_number"]').val();
+            entry.createdAt = new Date().getTime();
+            
+            var Entry = firebase.database().ref('/customers');
+            
+            Entry.push(entry).then(function(data){
+                window.location.href = 'customers.html'
+            }).catch(function(error){
+                alert(error);
+                console.error(error);
+            })
+            
+            return false;
+        });
+
+    </script>
+
+
+</body>
+
+</html>

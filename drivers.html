@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>menged|drivers</title>
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Nunito"/>
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+
+<body> 
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <a class="navbar-brand" href="home.html">menged.com</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+        </button>
+    
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item ">
+                <a class="nav-link" href="home.html">Home</a>
+            </li>
+            <li class="nav-item active">
+                <a class="nav-link" href="drivers.html">Drivers</a>
+            </li>
+            <li class="nav-item ">
+                <a class="nav-link" href="customers.html">Customers</a>
+            </li>
+            <li class="nav-item ">
+                <a class="nav-link" href="transactions.html">Transactions</a>
+            </li>
+            <li class="nav-item ">
+                <a class="nav-link" href="notifications.html">Notifications</a>
+            </li>
+        </ul>
+        <form class="form-inline my-2 my-lg-0" id="logoutForm">
+            <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Logout</button>
+        </form>
+        </div>
+    </nav>
+
+<div class="container-fluid" id="cont">
+    <button id="create_button" class="kc_fab_main_btn">+</button>
+    <div class="row justify-content-center" id="driversList">
+    </div>
+</div>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/7.7.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/7.7.0/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/7.7.0/firebase-database.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/7.7.0/firebase-analytics.js"></script>
+    <script src="js/scripts.js"></script>
+
+
+    <script>
+
+        var drivers = firebase.database().ref('/drivers').orderByChild('createdAt');
+        console.log(drivers);
+
+        $('#driversList').html('<div class="text-center" id="loading"><img id="loading-image" src="images/giphy.gif" alt="Loading..." /></div>');
+        drivers.on('value' , function(r){
+            var html = '';
+            r.forEach(function (item) {
+                entry = item.val()
+                if(entry.is_approved){
+                    html = '<div class="col-sm-7 col-xs-12">' + 
+                        '<div class="card my-1" style="">'+
+                            '<div class="card-body">'+
+                                '<h4 class="card-title mb-2">'+
+                                    '<div class="float-left">'+entry.name+'</div>'+
+                                    '<div class="float-right">'+entry.plate_number+'</div>'+
+                                '</h4>'+
+                                '<br>'+
+                                '<div class="card-text">'+
+                                    '<i class="fa fa-envelope-o mx-1"></i>'+
+                                    entry.email+'</div>'+
+                                '<div class="card-text">'+
+                                '<i class="fa fa-phone mx-1"></i>  '+
+                                entry.phone_number +'</div>'+
+                                '<a href="edit_driver.html?id='+item.key+'" class="btn btn-outline-info float-right mx-1">'+
+                                '    <i class="fa fa-pencil p-1"></i>'+
+                                '</a>'+
+                                '<a href="#" onClick="removeDriver(\''+item.key+'\')" class="btn btn-outline-danger float-right mx-1">'+
+                                '    <i class="fa fa-trash-o p-1"></i>'+
+                                '</a>'+
+                            '</div>'+
+                            '</div>'+
+                    '</div>' + html 
+                }
+                    
+            });
+            
+            $('#driversList').html(html);
+        });
+
+        function removeDriver(key){
+            if(confirm("Are you sure you want to remove this driver?")){
+                firebase.database().ref().child('/drivers/'+key+'/').remove().then(function(){
+                   alert("Drivers record was deleted");
+                });
+            }
+        }
+
+        $('#create_button').click(function(){
+            window.location.href = "create_driver.html"
+        })
+    </script>
+
+
+</body>
+
+</html>
